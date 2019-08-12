@@ -111,6 +111,11 @@
             <artifactId>viaversion-velocity</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>us.myles</groupId>
+            <artifactId>viaversion-glowstone</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
