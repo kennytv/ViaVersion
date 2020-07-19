@@ -1,11 +1,10 @@
 package us.myles.ViaVersion.sponge.commands;
 
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Identifiable;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
+import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 
 import java.util.UUID;
 
@@ -23,13 +22,8 @@ public class SpongeCommandSender implements ViaCommandSender {
 
     @Override
     public void sendMessage(String msg) {
-        source.sendMessage(
-                TextSerializers.JSON.deserialize(
-                        ComponentSerializer.toString(
-                                TextComponent.fromLegacyText(msg) // Hacky way to fix links
-                        )
-                )
-        );
+        // Hacky way to fix links
+        source.sendMessage(TextSerializers.JSON.deserialize(ChatRewriter.legacyTextToJson(msg).toString()));
     }
 
     @Override
@@ -39,7 +33,6 @@ public class SpongeCommandSender implements ViaCommandSender {
         } else {
             return UUID.fromString(getName());
         }
-
     }
 
     @Override

@@ -11,8 +11,6 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.slf4j.Logger;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
@@ -22,6 +20,7 @@ import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
+import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.ViaVersion.velocity.VersionInfo;
 import us.myles.ViaVersion.velocity.command.VelocityCommandHandler;
@@ -151,21 +150,16 @@ public class VelocityPlugin implements ViaPlatform<Player> {
 
     @Override
     public void sendMessage(UUID uuid, String message) {
-        PROXY.getPlayer(uuid).ifPresent(it -> it.sendMessage(
-                GsonComponentSerializer.INSTANCE.deserialize(
-                        ComponentSerializer.toString(TextComponent.fromLegacyText(message)) // Fixes links
-                )
-        ));
+        PROXY.getPlayer(uuid).ifPresent(player -> {
+            // Fixes links
+            player.sendMessage(GsonComponentSerializer.INSTANCE.deserialize(ChatRewriter.legacyTextToJson(message).toString()));
+        });
     }
 
     @Override
     public boolean kickPlayer(UUID uuid, String message) {
-        return PROXY.getPlayer(uuid).map(it -> {
-            it.disconnect(
-                    GsonComponentSerializer.INSTANCE.deserialize(
-                            ComponentSerializer.toString(TextComponent.fromLegacyText(message))
-                    )
-            );
+        return PROXY.getPlayer(uuid).map(player -> {
+            player.sendMessage(GsonComponentSerializer.INSTANCE.deserialize(ChatRewriter.legacyTextToJson(message).toString()));
             return true;
         }).orElse(false);
     }

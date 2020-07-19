@@ -5,7 +5,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.Nullable;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
@@ -15,6 +14,7 @@ import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.exception.InformativeException;
 import us.myles.ViaVersion.packets.Direction;
 import us.myles.ViaVersion.protocols.base.ProtocolInfo;
+import us.myles.ViaVersion.util.ChatColorUtil;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.util.Map;
@@ -202,7 +202,7 @@ public class UserConnection {
         }
 
         Via.getPlatform().runSync(() -> {
-            if (!Via.getPlatform().kickPlayer(uuid, ChatColor.translateAlternateColorCodes('&', reason))) {
+            if (!Via.getPlatform().kickPlayer(uuid, ChatColorUtil.translateAlternateColorCodes(reason))) {
                 channel.close(); // =)
             }
         });

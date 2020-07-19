@@ -3,9 +3,8 @@ package us.myles.ViaVersion.velocity.command;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.text.serializer.gson.GsonComponentSerializer;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
+import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 
 import java.util.UUID;
 
@@ -23,11 +22,7 @@ public class VelocityCommandSender implements ViaCommandSender {
 
     @Override
     public void sendMessage(String msg) {
-        source.sendMessage(
-                GsonComponentSerializer.INSTANCE.deserialize(
-                        ComponentSerializer.toString(TextComponent.fromLegacyText(msg)) // Fixes links
-                )
-        );
+        source.sendMessage(GsonComponentSerializer.INSTANCE.deserialize(ChatRewriter.legacyTextToJson(msg).toString()));
     }
 
     @Override

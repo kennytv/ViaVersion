@@ -1,12 +1,12 @@
 package us.myles.ViaVersion.commands;
 
 import com.google.common.base.Preconditions;
-import net.md_5.bungee.api.ChatColor;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.command.ViaSubCommand;
 import us.myles.ViaVersion.api.command.ViaVersionCommand;
 import us.myles.ViaVersion.commands.defaultsubs.*;
+import us.myles.ViaVersion.util.ChatColorUtil;
 
 import java.util.*;
 
@@ -149,7 +149,7 @@ public abstract class ViaCommandHandler implements ViaVersionCommand {
      */
     public static String color(String string) {
         try {
-            string = ChatColor.translateAlternateColorCodes('&', string); //Dont replace all & with $ like we did before.
+            string = ChatColorUtil.translateAlternateColorCodes(string); //Dont replace all & with $ like we did before.
         } catch (Exception ignored) {
         }
         return string;

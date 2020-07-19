@@ -2,8 +2,6 @@ package us.myles.ViaVersion;
 
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
@@ -23,15 +21,22 @@ import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
+import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.sponge.commands.SpongeCommandHandler;
 import us.myles.ViaVersion.sponge.commands.SpongeCommandSender;
-import us.myles.ViaVersion.sponge.platform.*;
+import us.myles.ViaVersion.sponge.platform.SpongeTaskId;
+import us.myles.ViaVersion.sponge.platform.SpongeViaAPI;
+import us.myles.ViaVersion.sponge.platform.SpongeViaConfig;
+import us.myles.ViaVersion.sponge.platform.SpongeViaInjector;
+import us.myles.ViaVersion.sponge.platform.SpongeViaLoader;
 import us.myles.ViaVersion.sponge.util.LoggerWrapper;
 import us.myles.ViaVersion.util.GsonUtil;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Plugin(id = "viaversion",
@@ -164,16 +169,10 @@ public class SpongePlugin implements ViaPlatform<Player> {
 
     @Override
     public void sendMessage(UUID uuid, String message) {
-        game.getServer().getPlayer(uuid)
-                .ifPresent(player ->
-                        player.sendMessage(
-                                TextSerializers.JSON.deserialize(
-                                        ComponentSerializer.toString(
-                                                TextComponent.fromLegacyText(message) // Hacky way to fix links
-                                        )
-                                )
-                        )
-                );
+        game.getServer().getPlayer(uuid).ifPresent(player -> {
+            // Hacky way to fix links
+            player.sendMessage(TextSerializers.JSON.deserialize(ChatRewriter.legacyTextToJson(message).toString()));
+        });
     }
 
     @Override

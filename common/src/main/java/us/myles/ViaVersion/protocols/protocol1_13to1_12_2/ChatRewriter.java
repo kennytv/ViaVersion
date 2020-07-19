@@ -1,28 +1,17 @@
 package us.myles.ViaVersion.protocols.protocol1_13to1_12_2;
 
 import com.google.gson.JsonElement;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import us.myles.ViaVersion.api.rewriters.ComponentRewriter;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.data.ComponentRewriter1_13;
-import us.myles.ViaVersion.util.GsonUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatRewriter {
     private static final Pattern URL = Pattern.compile("^(?:(https?)://)?([-\\w_.]{2,}\\.[a-z]{2,4})(/\\S*)?$");
-    private static final BaseComponent[] EMPTY_COMPONENTS = new BaseComponent[0];
     private static final ComponentRewriter COMPONENT_REWRITER = new ComponentRewriter1_13();
 
-    // Based on https://github.com/SpigotMC/BungeeCord/blob/master/chat/src/main/java/net/md_5/bungee/api/chat/TextComponent.java
-    public static JsonElement fromLegacyText(String message, ChatColor defaultColor) {
-        List<BaseComponent> components = new ArrayList<>();
+    public static JsonElement fromLegacyText(String message, char defaultColor) {
+        /*List<BaseComponent> components = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         TextComponent component = new TextComponent();
         Matcher matcher = URL.matcher(message);
@@ -115,15 +104,17 @@ public class ChatRewriter {
         components.add(component);
 
         final String serializedComponents = ComponentSerializer.toString(components.toArray(EMPTY_COMPONENTS));
-        return GsonUtil.getJsonParser().parse(serializedComponents);
+        return GsonUtil.getJsonParser().parse(serializedComponents);*/
+        return null;
     }
 
     public static JsonElement legacyTextToJson(String legacyText) {
-        return fromLegacyText(legacyText, ChatColor.WHITE);
+        return fromLegacyText(legacyText, 'f');
     }
 
     public static String jsonTextToLegacy(String value) {
-        return TextComponent.toLegacyText(ComponentSerializer.parse(value));
+        //return TextComponent.toLegacyText(ComponentSerializer.parse(value));
+        return null;
     }
 
     public static void processTranslate(JsonElement value) {
