@@ -22,6 +22,10 @@ public final class ChatColorUtil {
         addColorOrindal('r');
     }
 
+    public static boolean isColorCode(char c) {
+        return COLOR_ORDINALS.containsKey(c);
+    }
+
     public static int getColorOrdinal(char c) {
         return COLOR_ORDINALS.getOrDefault(c, -1);
     }

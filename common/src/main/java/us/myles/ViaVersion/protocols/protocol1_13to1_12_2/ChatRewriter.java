@@ -1,9 +1,12 @@
 package us.myles.ViaVersion.protocols.protocol1_13to1_12_2;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import us.myles.ViaVersion.api.rewriters.ComponentRewriter;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.data.ComponentRewriter1_13;
+import us.myles.ViaVersion.util.ChatColorUtil;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatRewriter {
@@ -11,14 +14,13 @@ public class ChatRewriter {
     private static final ComponentRewriter COMPONENT_REWRITER = new ComponentRewriter1_13();
 
     public static JsonElement fromLegacyText(String message, char defaultColor) {
-        /*List<BaseComponent> components = new ArrayList<>();
+        JsonArray components = new JsonArray();
         StringBuilder builder = new StringBuilder();
         TextComponent component = new TextComponent();
         Matcher matcher = URL.matcher(message);
-
         for (int i = 0; i < message.length(); i++) {
             char c = message.charAt(i);
-            if (c == ChatColor.COLOR_CHAR) {
+            if (c == ChatColorUtil.COLOR_CHAR) {
                 if (++i >= message.length()) {
                     break;
                 }
@@ -26,8 +28,7 @@ public class ChatRewriter {
                 if (c >= 'A' && c <= 'Z') {
                     c += 32;
                 }
-                ChatColor format = ChatColor.getByChar(c);
-                if (format == null) {
+                if (!ChatColorUtil.isColorCode(c)) {
                     continue;
                 }
                 if (builder.length() > 0) {
@@ -37,38 +38,30 @@ public class ChatRewriter {
                     builder = new StringBuilder();
                     components.add(old);
                 }
-                if (ChatColor.BOLD.equals(format)) {
-                    component.setBold(true);
-                } else if (ChatColor.ITALIC.equals(format)) {
-                    component.setItalic(true);
-                } else if (ChatColor.UNDERLINE.equals(format)) {
-                    component.setUnderlined(true);
-                } else if (ChatColor.STRIKETHROUGH.equals(format)) {
-                    component.setStrikethrough(true);
-                } else if (ChatColor.MAGIC.equals(format)) {
-                    component.setObfuscated(true);
-                } else if (ChatColor.RESET.equals(format)) {
-                    format = defaultColor;
 
-                    component = new TextComponent();
-                    component.setColor(format);
-                    // ViaVersion start
-                    component.setBold(false);
-                    component.setItalic(false);
-                    component.setUnderlined(false);
-                    component.setStrikethrough(false);
-                    component.setObfuscated(false);
-                    // ViaVersion end
-                } else {
-                    component = new TextComponent();
-                    component.setColor(format);
-                    // ViaVersion start
-                    component.setBold(false);
-                    component.setItalic(false);
-                    component.setUnderlined(false);
-                    component.setStrikethrough(false);
-                    component.setObfuscated(false);
-                    // ViaVersion end
+                switch (c) {
+                    case 'k':
+                        // magic
+                        break;
+                    case 'l':
+                        // bold
+                        break;
+                    case 'm':
+                        // strikethrough
+                        break;
+                    case 'n':
+                        // underlined
+                        break;
+                    case 'o':
+                        // italic
+                        break;
+                    case 'r':
+                        c = defaultColor;
+                        // setcolor
+                        break;
+                    default:
+                        // set color
+                        break;
                 }
                 continue;
             }
@@ -77,7 +70,6 @@ public class ChatRewriter {
                 pos = message.length();
             }
             if (matcher.region(i, pos).find()) { //Web link handling
-
                 if (builder.length() > 0) {
                     TextComponent old = component;
                     component = new TextComponent(old);
@@ -104,7 +96,7 @@ public class ChatRewriter {
         components.add(component);
 
         final String serializedComponents = ComponentSerializer.toString(components.toArray(EMPTY_COMPONENTS));
-        return GsonUtil.getJsonParser().parse(serializedComponents);*/
+        return GsonUtil.getJsonParser().parse(serializedComponents);
         return null;
     }
 

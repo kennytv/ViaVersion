@@ -1024,7 +1024,7 @@ public class Protocol1_13To1_12_2 extends Protocol<ClientboundPackets1_12_1, Cli
             char section = input.charAt(index);
             if (section == ChatColorUtil.COLOR_CHAR && index < length - 1) {
                 char c = input.charAt(index + 1);
-                if (ChatColorUtil.CODE_PATTERN.matcher(Character.toString(c)).matches() && !FORMATTING_CODES.contains(c)) {
+                if (ChatColorUtil.isColorCode(c) && !FORMATTING_CODES.contains(c)) {
                     return c;
                 }
             }
